@@ -1,0 +1,25 @@
+mergeInto(LibraryManager.library, {
+  PlayDeckBridge_PostMessage: function (method) {
+    const parent = window.parent.window;
+    parent.postMessage(
+      { playdeck: { method: UTF8ToString(method) } },
+      "*"
+    );
+  },
+
+  PlayDeckBridge_PostMessage_IntValue: function (method, value) {
+    const parent = window.parent.window;
+    parent.postMessage(
+      { playdeck: { method: UTF8ToString(method), value: value } },
+      "*"
+    );
+  },
+  
+  PlayDeckBridge_PostMessage_StringValue: function (method, value) {
+    const parent = window.parent.window;
+    parent.postMessage(
+      { playdeck: { method: UTF8ToString(method), value: UTF8ToString(value) } },
+      "*"
+    );
+  }
+});
