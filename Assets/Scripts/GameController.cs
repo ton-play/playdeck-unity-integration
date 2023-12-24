@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
     
     public void GetData()
     {
-        _playDeckBridge.GetData((data) => Debug.Log($"Data from PlayDeckBridge: {data}"));
+        _playDeckBridge.GetData("test", (data) => Debug.Log($"Data from PlayDeckBridge: {data}"));
     }
     
     public void GetUserProfile()
@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour
     
     public void SetData(string input)
     {
-        _playDeckBridge.SetData(input);
+        _playDeckBridge.SetData("test", input);
     }
 
     public void SetAd(string link)

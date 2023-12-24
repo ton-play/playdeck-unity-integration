@@ -16,6 +16,12 @@ namespace PlayDeck
 
         [DllImport("__Internal")]
         private static extern void PlayDeckBridge_PostMessage_StringValue(string method, string value);
+        
+        [DllImport("__Internal")]
+        private static extern void PlayDeckBridge_PostMessage_SetData(string key, string value);
+        
+        [DllImport("__Internal")]
+        private static extern void PlayDeckBridge_PostMessage_GetData(string key);
 
         [SerializeField] private string _debugTelegramId;
         [SerializeField] private string _debugUsername;
@@ -56,23 +62,23 @@ namespace PlayDeck
 #endif
         }
 
-        public void GetData(Action<string> callback)
+        public void GetData(string key, Action<string> callback)
         {
 #if UNITY_EDITOR
-            Debug.Log("[PlayDeckBridge]: Fake GetData");
+            Debug.Log($"[PlayDeckBridge]: Fake GetData[{key}]");
 #else
             _getDataCallback = callback;
          
-            PlayDeckBridge_PostMessage(Constants.GET_DATA);
+            PlayDeckBridge_PostMessage_GetData(key);
 #endif
         }
 
-        public void SetData(string data)
+        public void SetData(string key, string data)
         {
 #if UNITY_EDITOR
-            Debug.Log($"[PlayDeckBridge]: Fake SetData: {data}");
+            Debug.Log($"[PlayDeckBridge]: Fake SetData[{key}]: {data}");
 #else
-            PlayDeckBridge_PostMessage_StringValue(Constants.SET_DATA, data);
+            PlayDeckBridge_PostMessage_SetData(key, data);
 #endif
         }
         
