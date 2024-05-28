@@ -14,7 +14,7 @@ var playDeckBridge = (function() {
             _unityInstance?.SendMessage("PlayDeckBridge", "GetScoreHandler", JSON.stringify(playdeck.value))
         }
         else if (playdeck.method === "getData") {
-            _unityInstance?.SendMessage("PlayDeckBridge", "GetDataHandler", JSON.stringify(playdeck.value))
+            _unityInstance?.SendMessage("PlayDeckBridge", "GetDataHandler", JSON.stringify(playdeck.key))
         }
         else if (playdeck.method === "setScore") {
             console.log(playdeck);
