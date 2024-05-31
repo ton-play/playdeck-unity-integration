@@ -140,9 +140,19 @@ namespace PlayDeck
         public class UserData
         {
             public string avatar;
+            public bool canSeeOnboarding;
+            public string firstName;
+            public string lastName;
+            public ulong gameSessionsCount;
+            public string locale;
+            public string sessionId;
             public string telegramId;
+            public string token;
             public string username;
+    
             public Params @params;
+
+            public List<Wallet> wallets;
 
             [Serializable]
             public class Params
@@ -155,6 +165,12 @@ namespace PlayDeck
         {
             public long position;
             public int score;
+        }
+        
+        public class Wallet
+        {
+            public string type;
+            public float balance;
         }
     }
 }

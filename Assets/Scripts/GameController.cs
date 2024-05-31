@@ -1,10 +1,15 @@
 ﻿using System;
 using PlayDeck;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    private const string DATA_KEY = "test";
+
     [SerializeField] private PlayDeckBridge _playDeckBridge;
+    [SerializeField] private InputField _setDataInput;
+    [SerializeField] private InputField _setScoreInput;
     
     public void GetScore()
     {
@@ -13,7 +18,7 @@ public class GameController : MonoBehaviour
     
     public void GetData()
     {
-        _playDeckBridge.GetData("test", (data) => Debug.Log($"Data from PlayDeckBridge: {data}"));
+        _playDeckBridge.GetData(DATA_KEY, (data) => Debug.Log($"Data from PlayDeckBridge: [key: {DATA_KEY}][value: {data}]"));
     }
     
     public void GetUserProfile()
@@ -21,18 +26,13 @@ public class GameController : MonoBehaviour
         _playDeckBridge.GetUserProfile((userData) => Debug.Log($"UserData from PlayDeckBridge: {JsonUtility.ToJson(userData)}"));
     }
     
-    public void SetScore(string input)
+    public void SetScore()
     {
-        _playDeckBridge.SetScore(Convert.ToInt32(input));
+        _playDeckBridge.SetScore(Convert.ToInt32(_setScoreInput.text));
     }
     
-    public void SetData(string input)
+    public void SetData()
     {
-        _playDeckBridge.SetData("test", input);
-    }
-
-    public void SetAd(string link)
-    {
-        _playDeckBridge.SetAd(link);
+        _playDeckBridge.SetData(DATA_KEY, _setDataInput.text);
     }
 }
