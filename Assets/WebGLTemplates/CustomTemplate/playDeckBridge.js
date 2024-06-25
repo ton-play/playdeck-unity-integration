@@ -22,6 +22,10 @@ var playDeckBridge = (function() {
             console.log(playdeck.value);
             _unityInstance?.SendMessage("PlayDeckBridge", "RequestPaymentHandler", JSON.stringify(playdeck.value))
         }
+        else if (playdeck.method === "getPaymentInfo") {
+            console.log(playdeck.value);
+            _unityInstance?.SendMessage("PlayDeckBridge", "GetPaymentInfoHandler", JSON.stringify(playdeck.value))
+        }
         else if (playdeck.method === "setScore") {
             console.log(playdeck);
         }

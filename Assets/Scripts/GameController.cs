@@ -18,10 +18,15 @@ public class GameController : MonoBehaviour
     [SerializeField] private InputField _paymentRequestExternalId;
     [SerializeField] private InputField _paymentRequestPhotoUrl;
     
+    [Header("Get Payment Info")]
+    [SerializeField] private InputField _getPaymentInfoExternalId;
+    
     private string _paymentRequestAmountValue;
     private string _paymentRequestDescriptionValue;
     private string _paymentRequestExternalIdValue;
     private string _paymentRequestPhotoUrlValue;
+    
+    private string _getPaymentInfoExternalIdValue;
 
     public void Start()
     {
@@ -29,6 +34,7 @@ public class GameController : MonoBehaviour
         _paymentRequestDescription.onValueChanged.AddListener(val => _paymentRequestDescriptionValue = val);
         _paymentRequestExternalId.onValueChanged.AddListener(val => _paymentRequestExternalIdValue = val);
         _paymentRequestPhotoUrl.onValueChanged.AddListener(val => _paymentRequestPhotoUrlValue = val);
+        _getPaymentInfoExternalId.onValueChanged.AddListener(val => _getPaymentInfoExternalIdValue = val);
     }
 
     public void GetScore()
@@ -68,6 +74,17 @@ public class GameController : MonoBehaviour
         {
             Debug.Log("[Unity] Request payment response: " + JsonUtility.ToJson(responseData));
             Application.OpenURL(responseData.url);
+        });
+    }
+    
+    public void GetPaymentInfo()
+    {
+        _playDeckBridge.GetPaymentInfo(new PlayDeckBridge.GetPaymentInfoRequestData()
+        {
+            externalId = _getPaymentInfoExternalIdValue,
+        }, responseData =>
+        {
+            Debug.Log("[Unity] Request payment response: " + JsonUtility.ToJson(responseData));
         });
     }
 }

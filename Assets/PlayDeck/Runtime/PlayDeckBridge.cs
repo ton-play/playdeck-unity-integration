@@ -26,21 +26,27 @@ namespace PlayDeck
         
         [DllImport("__Internal")]
         private static extern void PlayDeckBridge_PostMessage_RequestPayment(string data);
+        
+        [DllImport("__Internal")]
+        private static extern void PlayDeckBridge_PostMessage_GetPaymentInfo(string data);
 
-        [SerializeField] private string _debugTelegramId;
+        [SerializeField] private long _debugTelegramId;
         [SerializeField] private string _debugUsername;
         [SerializeField] private string _debugReferralId;
         [SerializeField] private PaymentResponseData _debugPaymentResponse;
+        [SerializeField] private GetPaymentInfoResponseData _debugGetPaymentInfoResponse;
 
         private UserData _userData;
         private string _dataJson;
         private GetScoreData _score;
         private PaymentResponseData _paymentResponseJson;
-        
+        private GetPaymentInfoResponseData _getPaymentInfoResponseJson;
+
         private Action<UserData> _getUserCallback;
         private Action<string> _getDataCallback;
         private Action<GetScoreData> _getScoreCallback;
         private Action<PaymentResponseData> _paymentRequestCallback;
+        private Action<GetPaymentInfoResponseData> _getPaymentInfoRequestCallback;
 
         public UserData User => _userData;
 
@@ -138,6 +144,22 @@ namespace PlayDeck
             PlayDeckBridge_PostMessage_RequestPayment(json);
 #endif
         }
+        
+        public void GetPaymentInfo(GetPaymentInfoRequestData requestData, Action<GetPaymentInfoResponseData> callback)
+        {
+#if UNITY_EDITOR
+            Debug.Log($"[PlayDeckBridge]: Fake GetPaymentInfo");
+
+            callback?.Invoke(_debugGetPaymentInfoResponse);
+#else
+            _getPaymentInfoRequestCallback = callback;
+
+            var json = JsonUtility.ToJson(requestData);
+            
+            Debug.Log($"[PlayDeckBridge]: GetPaymentInfo {json}");
+            PlayDeckBridge_PostMessage_GetPaymentInfo(json);
+#endif
+        }
 
         private void GetUserHandler(string userJson)
         {
@@ -165,6 +187,13 @@ namespace PlayDeck
             _paymentResponseJson = converted;
             _paymentRequestCallback?.Invoke(converted);
         }
+        
+        private void GetPaymentInfoHandler(string getPaymentInfoJson)
+        {
+            var converted = JsonUtility.FromJson<GetPaymentInfoResponseData>(getPaymentInfoJson);
+            _getPaymentInfoResponseJson = converted;
+            _getPaymentInfoRequestCallback?.Invoke(converted);
+        }
 
         [Serializable]
         public class UserData
@@ -176,7 +205,7 @@ namespace PlayDeck
             public ulong gameSessionsCount;
             public string locale;
             public string sessionId;
-            public string telegramId;
+            public long telegramId;
             public string token;
             public string username;
     
@@ -203,8 +232,32 @@ namespace PlayDeck
             public float balance;
         }
         
+        [Serializable]
+        public class PaymentRequestData
+        {
+            /// <value>
+            /// The amount is represented as an integer.
+            /// </value>
+            public int amount;
+            
+            /// <value>
+            /// The description of the payment order.
+            /// </value>
+            public string description;
+            
+            /// <value>
+            /// A unique order identifier in your system, which you can use to check in postback that payment was successful.
+            /// </value>
+            public string externalId;
+            
+            /// <value>
+            /// The photo URL is an optional field.
+            /// </value>
+            public string photoUrl;
+        }
+        
         /// <summary>
-        /// Represents the response data for a payment.
+        /// Represents the response data for a payment request.
         /// </summary>
         [Serializable]
         public class PaymentResponseData
@@ -216,39 +269,28 @@ namespace PlayDeck
         }
         
         [Serializable]
-        public class PaymentRequestData
+        public class GetPaymentInfoRequestData
         {
-            /// <summary>
-            /// Gets or sets the amount.
-            /// </summary>
-            /// <value>
-            /// The amount is represented as an integer.
-            /// </value>
-            public int amount;
-
-            /// <summary>
-            /// Gets or sets the description.
-            /// </summary>
-            /// <value>
-            /// The description of the payment order.
-            /// </value>
-            public string description;
-
-            /// <summary>
-            /// Gets or sets the external identifier.
-            /// </summary>
             /// <value>
             /// A unique order identifier in your system, which you can use to check in postback that payment was successful.
             /// </value>
             public string externalId;
-
+        }
+        
+        /// <summary>
+        /// Represents the response data for concrete payment.
+        /// </summary>
+        [Serializable]
+        public class GetPaymentInfoResponseData
+        {
             /// <summary>
-            /// Gets or sets the photo URL.
+            /// The URL for the purchase via Telegram.
             /// </summary>
-            /// <value>
-            /// The photo URL is an optional field.
-            /// </value>
-            public string photoUrl;
+            public bool paid;
+
+            public long telegramId;
+
+            public long dateTime;
         }
     }
 }
