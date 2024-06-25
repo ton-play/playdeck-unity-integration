@@ -1,6 +1,7 @@
 ﻿using System;
 using PlayDeck;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
@@ -11,6 +12,25 @@ public class GameController : MonoBehaviour
     [SerializeField] private InputField _setDataInput;
     [SerializeField] private InputField _setScoreInput;
     
+    [Header("Payment Request")]
+    [SerializeField] private InputField _paymentRequestAmount;
+    [SerializeField] private InputField _paymentRequestDescription;
+    [SerializeField] private InputField _paymentRequestExternalId;
+    [SerializeField] private InputField _paymentRequestPhotoUrl;
+    
+    private string _paymentRequestAmountValue;
+    private string _paymentRequestDescriptionValue;
+    private string _paymentRequestExternalIdValue;
+    private string _paymentRequestPhotoUrlValue;
+
+    public void Start()
+    {
+        _paymentRequestAmount.onValueChanged.AddListener(val => _paymentRequestAmountValue = val);
+        _paymentRequestDescription.onValueChanged.AddListener(val => _paymentRequestDescriptionValue = val);
+        _paymentRequestExternalId.onValueChanged.AddListener(val => _paymentRequestExternalIdValue = val);
+        _paymentRequestPhotoUrl.onValueChanged.AddListener(val => _paymentRequestPhotoUrlValue = val);
+    }
+
     public void GetScore()
     {
         _playDeckBridge.GetScore((score) => Debug.Log($"Score from PlayDeckBridge: [position: {score.position}, score: {score.score}]"));
@@ -34,5 +54,20 @@ public class GameController : MonoBehaviour
     public void SetData()
     {
         _playDeckBridge.SetData(DATA_KEY, _setDataInput.text);
+    }
+
+    public void RequestPayment()
+    {
+        _playDeckBridge.RequestPayment(new PlayDeckBridge.PaymentRequestData()
+        {
+            amount = Convert.ToInt32(_paymentRequestAmountValue),
+            description = _paymentRequestDescriptionValue,
+            externalId = _paymentRequestExternalIdValue,
+            photoUrl = _paymentRequestPhotoUrlValue
+        }, responseData =>
+        {
+            Debug.Log("[Unity] Request payment response: " + JsonUtility.ToJson(responseData));
+            Application.OpenURL(responseData.url);
+        });
     }
 }

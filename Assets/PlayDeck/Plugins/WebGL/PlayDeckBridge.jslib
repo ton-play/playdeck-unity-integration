@@ -37,5 +37,15 @@ mergeInto(LibraryManager.library, {
       { playdeck: { method: "getData", key: UTF8ToString(key)} },
       "*"
     );
+  },
+  
+  PlayDeckBridge_PostMessage_RequestPayment: function(data) {
+    const parent = window.parent.window;
+    const jsonData = JSON.parse(UTF8ToString(data));
+    console.log(jsonData);
+    parent.postMessage(
+      { playdeck: { method: "requestPayment", value: jsonData} },
+      "*"
+    );
   }
 });
