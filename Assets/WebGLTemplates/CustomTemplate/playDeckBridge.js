@@ -12,9 +12,6 @@ var playDeckBridge = (function() {
         if (playdeck.method === "getUserProfile") {
             _unityInstance?.SendMessage("PlayDeckBridge", "GetUserHandler", JSON.stringify(playdeck.value))
         }
-        else if (playdeck.method === "getScore") {
-            _unityInstance?.SendMessage("PlayDeckBridge", "GetScoreHandler", JSON.stringify(playdeck.value))
-        }
         else if (playdeck.method === "getData") {
             _unityInstance?.SendMessage("PlayDeckBridge", "GetDataHandler", JSON.stringify(playdeck.value.data))
         }
@@ -26,8 +23,33 @@ var playDeckBridge = (function() {
             console.log(playdeck.value);
             _unityInstance?.SendMessage("PlayDeckBridge", "GetPaymentInfoHandler", JSON.stringify(playdeck.value))
         }
-        else if (playdeck.method === "setScore") {
-            console.log(playdeck);
+        else if (playdeck.method === "getShareLink") {
+            console.log(playdeck.value);
+            _unityInstance?.SendMessage("PlayDeckBridge", "GetShareLinkHandler", playdeck.value);
+        }
+        else if (playdeck.method === "getPlaydeckState") {
+            console.log(playdeck.value);
+            _unityInstance?.SendMessage("PlayDeckBridge", "GetPlaydeckStateHandler", playdeck.value ? 1 : 0 );
+        }
+        else if (playdeck.method === "rewardedAd") {
+            console.log(playdeck.value);
+            _unityInstance?.SendMessage("PlayDeckBridge", "RewardedAdHandler", JSON.stringify(playdeck.value) );
+        }
+        else if (playdeck.method === "errAd") {
+            console.log(playdeck.value);
+            _unityInstance?.SendMessage("PlayDeckBridge", "ErrAdHandler", JSON.stringify(playdeck.value) );
+        }
+        else if (playdeck.method === "skipAd") {
+            console.log(playdeck.value);
+            _unityInstance?.SendMessage("PlayDeckBridge", "SkipAdHandler", JSON.stringify(playdeck.value) );
+        }
+        else if (playdeck.method === "notFoundAd") {
+            console.log(playdeck.value);
+            _unityInstance?.SendMessage("PlayDeckBridge", "NotFoundAdHandler", JSON.stringify(playdeck.value) );
+        }
+        else if (playdeck.method === "startAd") {
+            console.log(playdeck.value);
+            _unityInstance?.SendMessage("PlayDeckBridge", "StartAdHandler", JSON.stringify(playdeck.value) );
         }
     }
 
