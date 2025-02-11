@@ -75,6 +75,7 @@ namespace PlayDeck
         private Action<string> _getDataCallback;
         private Action<PaymentResponseData> _paymentRequestCallback;
         private Action<GetPaymentInfoResponseData> _getPaymentInfoRequestCallback;
+        private Action<string> _invoiceClosedCallback;
         private Action<string> _getShareLinkCallback;
         private Action<bool> _getPlaydeckStateCallback;
         
@@ -151,7 +152,18 @@ namespace PlayDeck
             PlayDeckBridge_PostMessage_RequestPayment(json);
 #endif
         }
-        
+
+        public void TrackInvoiceClosed(Action<string> callback)
+        {
+#if UNITY_EDITOR
+            Debug.Log($"[PlayDeckBridge]: Fake TrackInvoiceClosed");
+#else
+            _invoiceClosedCallback = callback;
+
+            Debug.Log($"[PlayDeckBridge]: TrackInvoiceClosed");
+#endif
+        }
+
         public void GetPaymentInfo(GetPaymentInfoRequestData requestData, Action<GetPaymentInfoResponseData> callback)
         {
 #if UNITY_EDITOR
@@ -314,7 +326,12 @@ namespace PlayDeck
             _getPaymentInfoResponseJson = converted;
             _getPaymentInfoRequestCallback?.Invoke(converted);
         }
-        
+
+        private void InvoiceClosedHandler(string status)
+        {
+            _invoiceClosedCallback?.Invoke(status);
+        }
+
         private void GetShareLinkHandler(string shareLink)
         {
             _getShareLinkCallback?.Invoke(shareLink);
