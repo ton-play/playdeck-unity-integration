@@ -26,6 +26,10 @@ var playDeckBridge = (function() {
             console.log(playdeck.value);
             _unityInstance?.SendMessage("PlayDeckBridge", "GetPaymentInfoHandler", JSON.stringify(playdeck.value))
         }
+        else if (playdeck.method === 'invoiceClosed') {
+            console.log(playdeck.value);
+            _unityInstance?.SendMessage("PlayDeckBridge", "InvoiceClosedHandler", JSON.stringify(playdeck.value));
+        }
         else if (playdeck.method === "getShareLink") {
             console.log(playdeck.value);
             _unityInstance?.SendMessage("PlayDeckBridge", "GetShareLinkHandler", playdeck.value);

@@ -74,6 +74,8 @@ public class GameController : MonoBehaviour
         _setDataValueInput.onValueChanged.AddListener(val => _setDataValueValue = val);
         
         _openTelegramLink.onValueChanged.AddListener(val => _openTelegramLinkValue = val);
+
+        TrackInvoiceClosed();
     }
     
     public void GetData()
@@ -116,6 +118,16 @@ public class GameController : MonoBehaviour
             _messageViewer.Show($"Request payment response: " + JsonUtility.ToJson(responseData));
             
             _playDeckBridge.OpenTelegramLink(responseData.url);
+        });
+    }
+
+    public void TrackInvoiceClosed()
+    {
+        _playDeckBridge.TrackInvoiceClosed(status =>
+        {
+            Debug.Log("[Unity] Invoice closed status: " + status);
+
+            _messageViewer.Show($"Invoice closed status: " + status);
         });
     }
     
