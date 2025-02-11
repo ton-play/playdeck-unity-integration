@@ -309,7 +309,7 @@ namespace PlayDeck
         
         private void GetPaymentInfoHandler(string getPaymentInfoJson)
         {
-            var settings = new JsonSerializerSettings {NullValueHandling = NullValueHandling Ignore};
+            var settings = new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore};
             var converted = JsonConvert.DeserializeObject<GetPaymentInfoResponseData>(getPaymentInfoJson, settings);
             _getPaymentInfoResponseJson = converted;
             _getPaymentInfoRequestCallback?.Invoke(converted);
