@@ -44,4 +44,5 @@ This guide provides step-by-step instructions for integrating PlayDeck into your
 
 ## Additional Notes
 - This guide assumes a basic familiarity with Unity and web development.
+- **You can find extensive description for all supported methods** [in the main Wiki page](https://github.com/ton-play/playdeck-integration-guide/wiki/Available-methods)
 - If you encounter any difficulties, you may contact us for additional help.
